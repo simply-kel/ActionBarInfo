@@ -6,14 +6,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import ru.kelcuprum.abi.ActionBarInfo;
 import ru.kelcuprum.abi.localization.Localization;
-import ru.kelcuprum.abi.config.UserConfig;
 
 public class Player {
     static Minecraft CLIENT = Minecraft.getInstance();
     public static String getItemName(){
         ItemStack main_hand = CLIENT.player.getItemInHand(InteractionHand.MAIN_HAND);
         String main_hand_item = main_hand.getItem().toString();
-        if(main_hand_item.equals("air") && UserConfig.VIEW_ITEM_OFF_HAND){
+        if(main_hand_item.equals("air") && ActionBarInfo.config.getBoolean("VIEW_ITEM_OFF_HAND", false)){
             ItemStack off_hand = CLIENT.player.getItemInHand(InteractionHand.OFF_HAND);
             String off_hand_item = off_hand.getItem().toString();
             if(off_hand_item.equals("air") || off_hand.getHoverName() == null) return null;
@@ -26,7 +25,7 @@ public class Player {
     public static int getItemCount(){
         ItemStack main_hand = CLIENT.player.getItemInHand(InteractionHand.MAIN_HAND);
         String main_hand_item = main_hand.getItem().toString();
-        if(main_hand_item.equals("air") && UserConfig.VIEW_ITEM_OFF_HAND){
+        if(main_hand_item.equals("air") && ActionBarInfo.config.getBoolean("VIEW_ITEM_OFF_HAND", false)){
             ItemStack off_hand = CLIENT.player.getItemInHand(InteractionHand.OFF_HAND);
             String off_hand_item = off_hand.getItem().toString();
             if(off_hand_item.equals("air")) return 0;

@@ -3,7 +3,7 @@ package ru.kelcuprum.abi.localization;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import org.json.JSONObject;
-import ru.kelcuprum.abi.config.UserConfig;
+import ru.kelcuprum.abi.ActionBarInfo;
 import ru.kelcuprum.abi.info.Utils;
 
 import java.io.File;
@@ -40,7 +40,7 @@ public class Localization {
     }
     public static String getRounding(double number){
         String text = String.format("%.3f", number);
-        if(!UserConfig.USE_EXTENDED_COORDINATES) text = text.substring(0, text.length()-4);
+        if(!ActionBarInfo.config.getBoolean("USE_EXTENDED_COORDINATES", false)) text = text.substring(0, text.length()-4);
         return text;
     }
 

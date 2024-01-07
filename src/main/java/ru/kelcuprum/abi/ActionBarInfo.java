@@ -20,9 +20,8 @@ import java.util.TimerTask;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.glfw.GLFW;
 import ru.kelcuprum.abi.localization.Localization;
-import ru.kelcuprum.abi.config.UserConfig;
 import ru.kelcuprum.abi.localization.StarScript;
-import ru.kelcuprum.abi.screens.ConfigScreen;
+import ru.kelcuprum.alinlib.config.Config;
 
 public class ActionBarInfo implements ClientModInitializer {
     public static final String MOD_ID = "actionbarinfo";
@@ -32,27 +31,11 @@ public class ActionBarInfo implements ClientModInitializer {
     private static String lastException;
     public static void log(String message) { log(message, Level.INFO);}
     public static void log(String message, Level level) { LOG.log(level, "[" + LOG.getName() + "] " + message); }
-    public static Boolean yetAnotherConfigLibV3 = FabricLoader.getInstance().getModContainer("yet_another_config_lib_v3").isPresent();
+    public static Config config = new Config("config/ActionBarInfo/config.json");
     @Override
     public void onInitializeClient() {
+        config.load();
         StarScript.init();
-        if(yetAnotherConfigLibV3){
-            KeyMapping openConfigKeyBind;
-            openConfigKeyBind = KeyBindingHelper.registerKeyBinding(new KeyMapping(
-                    "abi.key.openConfig",
-                    InputConstants.Type.KEYSYM,
-                    GLFW.GLFW_KEY_UNKNOWN, // The keycode of the key
-                    "abi.name"
-            ));
-            ClientTickEvents.END_CLIENT_TICK.register(client -> {
-                assert client.player != null;
-                while (openConfigKeyBind.consumeClick()) {
-                    final Screen current = client.screen;
-                    Screen configScreen = ConfigScreen.buildScreen(current);
-                    client.setScreen(configScreen);
-                }
-            });
-        }
         KeyMapping toggleKeyBind;
         toggleKeyBind = KeyBindingHelper.registerKeyBinding(new KeyMapping(
                 "abi.key.toggle",
@@ -63,12 +46,12 @@ public class ActionBarInfo implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             assert client.player != null;
             while (toggleKeyBind.consumeClick()) {
-                UserConfig.ENABLE_AB_INFORMATION = !UserConfig.ENABLE_AB_INFORMATION;
-                UserConfig.save();
+                config.setBoolean("ENABLE_AB_INFORMATION", !config.getBoolean("ENABLE_AB_INFORMATION", true));
+                config.save();
             }
         });
         ClientLifecycleEvents.CLIENT_STARTED.register((client -> {
-            UserConfig.load();
+            config.load();
             log("Client started!");
             start();
             HUDHandler hud = new HUDHandler();
@@ -80,7 +63,7 @@ public class ActionBarInfo implements ClientModInitializer {
         TIMER.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if(UserConfig.ENABLE_AB_INFORMATION && (UserConfig.TYPE_RENDER_ACTION_BAR == 0 || UserConfig.TYPE_RENDER_ACTION_BAR >5)) update();
+                if(config.getBoolean("ENABLE_AB_INFORMATION", true) && (config.getNumber("TYPE_RENDER_ACTION_BAR", 0).intValue() == 0 || config.getNumber("TYPE_RENDER_ACTION_BAR", 0).intValue() >5)) update();
             }
         }, 20, 20);
     }
