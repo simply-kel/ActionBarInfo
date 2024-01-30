@@ -5,16 +5,13 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import ru.kelcuprum.abi.ActionBarInfo;
+import ru.kelcuprum.abi.screens.config.MainConfigsScreen;
 
 @Environment(EnvType.CLIENT)
 public class ModMenuIntegration implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        if (ActionBarInfo.yetAnotherConfigLibV3) {
-            return ConfigScreen::buildScreen;
-        } else {
-            return null;
-        }
+        return new MainConfigsScreen()::build;
     }
 }

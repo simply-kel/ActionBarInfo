@@ -1,6 +1,6 @@
 plugins {
-    id 'fabric-loom' version '1.2-SNAPSHOT'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'dev.architectury.loom' version '1.4-SNAPSHOT'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'maven-publish'
 }
 
@@ -14,29 +14,31 @@ repositories {
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
-    jcenter()
     mavenCentral()
-    maven { url = "https://jitpack.io/" }
     maven { url = "https://maven.terraformersmc.com/releases" }
     maven { url = "https://maven.meteordev.org/releases" }
-    maven { url = "https://maven.isxander.dev/releases" }
-    maven { url = "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url = 'https://repo.kelcuprum.ru/snapshots' }
+    maven { url = 'https://repo.kelcuprum.ru/releases' }
+    maven { url = 'https://repo.kelcuprum.ru/test' }
+    maven { url = "https://maven.parchmentmc.org" } // MAPPINGS
+    maven { url = "https://jitpack.io/" }
 }
 
 configurations { shade }
 dependencies {
     // Minecraft/Fabric libs
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.officialMojangMappings()
-    // mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment "org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_version}@zip"
+    }
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // Mods libs
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-    modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl}"
     //
-    include(implementation "org.json:json:${project.JSON}")
-    include(implementation "meteordevelopment:starscript:0.2.2")
+    modImplementation("ru.kelcuprum.alinlib:AlinLib:${project.alinlib}")
+    include(implementation("meteordevelopment:starscript:0.2.2"))
 
     subprojects.each {
         implementation project(path: ":${it.name}", configuration: 'namedElements')

@@ -2,7 +2,8 @@ package ru.kelcuprum.abi.info;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.LivingEntity;
-import ru.kelcuprum.abi.localization.Localization;
+import ru.kelcuprum.abi.ActionBarInfo;
+import ru.kelcuprum.alinlib.config.Localization;
 
 public class Entity {
     public static boolean isTargetEntity = false;
@@ -40,9 +41,9 @@ public class Entity {
             healthMax = livingEntity.getMaxHealth();
             healthPercent = livingEntity.getHealth() / livingEntity.getMaxHealth();
 
-            x = Localization.getRounding(livingEntity.getX());
-            y = Localization.getRounding(livingEntity.getY());
-            z = Localization.getRounding(livingEntity.getZ());
+            x = Localization.getRounding(livingEntity.getX(), !ActionBarInfo.config.getBoolean("USE_EXTENDED_COORDINATES", false));
+            y = Localization.getRounding(livingEntity.getY(), !ActionBarInfo.config.getBoolean("USE_EXTENDED_COORDINATES", false));
+            z = Localization.getRounding(livingEntity.getZ(), !ActionBarInfo.config.getBoolean("USE_EXTENDED_COORDINATES", false));
 
             name = Localization.toString(livingEntity.getName());
             customName = livingEntity.getCustomName() == null ? name : Localization.toString(livingEntity.getCustomName());

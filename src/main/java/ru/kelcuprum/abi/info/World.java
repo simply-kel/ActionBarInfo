@@ -1,7 +1,7 @@
 package ru.kelcuprum.abi.info;
 
 import net.minecraft.client.Minecraft;
-import ru.kelcuprum.abi.localization.Localization;
+import ru.kelcuprum.abi.ActionBarInfo;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,13 +14,13 @@ public class World {
         if(CLIENT.level == null) return "";
         long currentTime = CLIENT.level.getDayTime() % 24000;
         if (currentTime < 6000 && currentTime > 0) {
-            return Localization.getLocalization("time.morning", false);
+            return ActionBarInfo.localization.getLocalization("time.morning", false, false);
         } else if (currentTime < 12000 && currentTime > 6000) {
-            return Localization.getLocalization("time.day", false);
+            return ActionBarInfo.localization.getLocalization("time.day", false, false);
         } else if (currentTime < 16500 && currentTime > 12000) {
-            return Localization.getLocalization("time.evening", false);
+            return ActionBarInfo.localization.getLocalization("time.evening", false, false);
         } else if (currentTime > 16500) {
-            return Localization.getLocalization("time.night", false);
+            return ActionBarInfo.localization.getLocalization("time.night", false, false);
         } else {
             return "";
         }
@@ -33,7 +33,7 @@ public class World {
         int day = (int) daytime / 1000 / 24;
         String clock;
         try {
-            String strDateFormat = Localization.getLocalization("date.time", false);
+            String strDateFormat = ActionBarInfo.localization.getLocalization("date.time", false, false);
             DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
             Calendar calendar = new GregorianCalendar();
             calendar.set(2000, 0, day+1, hours, minutes, 0);
@@ -50,10 +50,10 @@ public class World {
     }
     public static String getName(){
         String world = getCodeName();
-        if(world.equals("minecraft:the_moon")) return Localization.getLocalization("world.moon", false);
-        if(world.equals("minecraft:the_end")) return Localization.getLocalization("world.the_end", false);
-        if(world.equals("minecraft:the_nether")) return Localization.getLocalization("world.nether", false);
-        if(world.equals("minecraft:overworld")) return Localization.getLocalization("world.overworld", false);
-        return Localization.getLocalization("world.unknown", false);
+        if(world.equals("minecraft:the_moon")) return ActionBarInfo.localization.getLocalization("world.moon", false, false);
+        if(world.equals("minecraft:the_end")) return ActionBarInfo.localization.getLocalization("world.the_end", false, false);
+        if(world.equals("minecraft:the_nether")) return ActionBarInfo.localization.getLocalization("world.nether", false, false);
+        if(world.equals("minecraft:overworld")) return ActionBarInfo.localization.getLocalization("world.overworld", false, false);
+        return ActionBarInfo.localization.getLocalization("world.unknown", false, false);
     }
 }

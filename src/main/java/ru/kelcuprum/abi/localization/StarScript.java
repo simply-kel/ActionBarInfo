@@ -19,6 +19,7 @@ import ru.kelcuprum.abi.info.Entity;
 import ru.kelcuprum.abi.info.Player;
 import ru.kelcuprum.abi.info.World;
 import ru.kelcuprum.abi.info.block.NoteBlock;
+import ru.kelcuprum.alinlib.config.Localization;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -43,12 +44,12 @@ public class StarScript {
                 .set("x", () -> Value.string(Entity.isTargetEntity ? Entity.x : ""))
                 .set("y", () -> Value.string(Entity.isTargetEntity ? Entity.y : ""))
                 .set("z", () -> Value.string(Entity.isTargetEntity ? Entity.z : ""))
-                .set("health_percent", () -> Value.string(Entity.isTargetEntity ? Localization.getRounding(Entity.healthPercent*100) : ""))
-                .set("health_max", () -> Value.string(Entity.isTargetEntity ? Localization.getRounding(Entity.healthMax) : ""))
-                .set("health", () -> Value.string(Entity.isTargetEntity ? Localization.getRounding(Entity.health) : ""))
+                .set("health_percent", () -> Value.string(Entity.isTargetEntity ? Localization.getRounding(Entity.healthPercent*100, !ActionBarInfo.config.getBoolean("USE_EXTENDED_COORDINATES", false)) : ""))
+                .set("health_max", () -> Value.string(Entity.isTargetEntity ? Localization.getRounding(Entity.healthMax, !ActionBarInfo.config.getBoolean("USE_EXTENDED_COORDINATES", false)) : ""))
+                .set("health", () -> Value.string(Entity.isTargetEntity ? Localization.getRounding(Entity.health, !ActionBarInfo.config.getBoolean("USE_EXTENDED_COORDINATES", false)) : ""))
         );
         ss.set("fps", () -> Value.number(mc.getFps()));
-        ss.set("time", () -> Value.string(new SimpleDateFormat(Localization.getLocalization("date.time", false)).format(System.currentTimeMillis())));
+        ss.set("time", () -> Value.string(new SimpleDateFormat(ActionBarInfo.localization.getLocalization("date.time")).format(System.currentTimeMillis())));
         // Player
         ss.set("player", new ValueMap()
                 .set("name", () -> Value.string(mc.getUser().getName()))

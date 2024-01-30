@@ -5,15 +5,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import ru.kelcuprum.abi.ActionBarInfo;
-import ru.kelcuprum.abi.localization.Localization;
-import ru.kelcuprum.abi.config.UserConfig;
+import ru.kelcuprum.alinlib.config.Localization;
 
 public class Player {
     static Minecraft CLIENT = Minecraft.getInstance();
     public static String getItemName(){
         ItemStack main_hand = CLIENT.player.getItemInHand(InteractionHand.MAIN_HAND);
         String main_hand_item = main_hand.getItem().toString();
-        if(main_hand_item.equals("air") && UserConfig.VIEW_ITEM_OFF_HAND){
+        if(main_hand_item.equals("air") && ActionBarInfo.config.getBoolean("VIEW_ITEM_OFF_HAND", false)){
             ItemStack off_hand = CLIENT.player.getItemInHand(InteractionHand.OFF_HAND);
             String off_hand_item = off_hand.getItem().toString();
             if(off_hand_item.equals("air") || off_hand.getHoverName() == null) return null;
@@ -26,7 +25,7 @@ public class Player {
     public static int getItemCount(){
         ItemStack main_hand = CLIENT.player.getItemInHand(InteractionHand.MAIN_HAND);
         String main_hand_item = main_hand.getItem().toString();
-        if(main_hand_item.equals("air") && UserConfig.VIEW_ITEM_OFF_HAND){
+        if(main_hand_item.equals("air") && ActionBarInfo.config.getBoolean("VIEW_ITEM_OFF_HAND", false)){
             ItemStack off_hand = CLIENT.player.getItemInHand(InteractionHand.OFF_HAND);
             String off_hand_item = off_hand.getItem().toString();
             if(off_hand_item.equals("air")) return 0;
@@ -49,22 +48,22 @@ public class Player {
         return ActionBarInfo.DF.format(CLIENT.player.getArmorValue()/2);
     }
     public static String getX(){
-        return Localization.getRounding(CLIENT.getCameraEntity().getX());
+        return Localization.getRounding(CLIENT.getCameraEntity().getX(), !ActionBarInfo.config.getBoolean("USE_EXTENDED_COORDINATES", false));
     }
     public static String getY(){
-        return Localization.getRounding(CLIENT.getCameraEntity().getY());
+        return Localization.getRounding(CLIENT.getCameraEntity().getY(), !ActionBarInfo.config.getBoolean("USE_EXTENDED_COORDINATES", false));
     }
     public static String getZ(){
-        return Localization.getRounding(CLIENT.getCameraEntity().getZ());
+        return Localization.getRounding(CLIENT.getCameraEntity().getZ(), !ActionBarInfo.config.getBoolean("USE_EXTENDED_COORDINATES", false));
     }
     public static String getDirection(boolean oneSymbol){
         Direction direction = CLIENT.player.getDirection();
         return switch (direction) {
-            case NORTH -> oneSymbol ? "N" : Localization.getLocalization("north", false);
-            case SOUTH -> oneSymbol ? "S" : Localization.getLocalization("south", false);
-            case WEST -> oneSymbol ? "W" : Localization.getLocalization("west", false);
-            case EAST -> oneSymbol ? "E" : Localization.getLocalization("east", false);
-            default -> oneSymbol ? "?" : Localization.getLocalization("unknown", false);
+            case NORTH -> oneSymbol ? "N" : ActionBarInfo.localization.getLocalization("north", false, false);
+            case SOUTH -> oneSymbol ? "S" : ActionBarInfo.localization.getLocalization("south", false, false);
+            case WEST -> oneSymbol ? "W" : ActionBarInfo.localization.getLocalization("west", false, false);
+            case EAST -> oneSymbol ? "E" : ActionBarInfo.localization.getLocalization("east", false, false);
+            default -> oneSymbol ? "?" : ActionBarInfo.localization.getLocalization("unknown", false, false);
         };
     }
 }
